@@ -20,7 +20,7 @@ export function refererCheck(req, res, next) {
   const referer = req.headers.referer;
 
   if (!referer || !referer.startsWith("https://azure.gestech.com.co")) {
-    return res.status(403).json({ error: "Access denied" });
+    return res.sendStatus(404)
   }
 
   next();
@@ -29,7 +29,7 @@ export function refererCheck(req, res, next) {
 export function userAgentCheck(req, res, next) {
   const ua = req.headers["user-agent"];
   if (!ua || ua.length < 5) {
-    return res.status(403).json({ error: "Forbidden" });
+    return res.sendStatus(404)
   }
   next();
 }
