@@ -4,6 +4,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import { 
+  corsValidation,
+  refererCheck,
+  userAgentCheck
+} from "./middlewares/security.js";
+
 
 import proxyRoutes from './routes/proxy.js';
 
@@ -17,21 +23,12 @@ const limiter = rateLimit({
   max: 60,
 });
 
+app.use(cors());
+app.use(corsValidation);
+app.use(refererCheck);
+app.use(userAgentCheck);
+
 app.use(limiter);
-
-const allowedOrigins = [
-  "https://azure.gestech.com.co"
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  }
-}));
-
 
 app.use('/api', proxyRoutes);
 
