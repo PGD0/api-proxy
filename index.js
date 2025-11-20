@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import cors from 'cors';
 
 import proxyRoutes from './routes/proxy.js';
 
@@ -17,6 +18,10 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+
+app.use(cors({
+    origin: '*',
+}));
 
 app.use('/api', proxyRoutes);
 
