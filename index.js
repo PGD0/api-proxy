@@ -19,9 +19,19 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+const allowedOrigins = [
+  "https://azure.gestech.com.co"
+];
+
 app.use(cors({
-    origin: '*',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  }
 }));
+
 
 app.use('/api', proxyRoutes);
 
